@@ -9,7 +9,7 @@ class Quiz(models.Model):
     def __str__(self):
         return self.title
 
-    title = models.CharField(verbose_name="Текст вопроса", max_length=80)
+    title = models.CharField(verbose_name="Текст опроса", max_length=80)
     date_start = models.DateField(verbose_name="Дата начала")
     date_end = models.DateField(verbose_name="Дата окончания")
     description = models.TextField(verbose_name="Описание")
