@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
-from quiz.models import Quiz, SimpleQuestion, ChoiceQuestionItem, ChoiceQuestion
+from quiz.models import Quiz, SimpleQuestion, ChoiceQuestionItem, ChoiceQuestion, MultiChoiceQuestion, \
+    MultiChoiceQuestionItem, MultiChoiceAnswer
 
 
 class QuizSerializer(serializers.HyperlinkedModelSerializer):
@@ -18,4 +19,34 @@ class QuizSerializer(serializers.HyperlinkedModelSerializer):
 class SimpleQuestionSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = SimpleQuestion
-        fields = ('quiz', 'answer',)
+        fields = ('quiz', 'question', 'answer',)
+
+
+class ChoiceQuestionItemSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = ChoiceQuestionItem
+        fields = ('choice_question', 'choice_value',)
+
+
+class ChoiceQuestionSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = ChoiceQuestion
+        fields = ('quiz', 'question', 'choice',)
+
+
+class MultiChoiceQuestionSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = MultiChoiceQuestion
+        fields = ('quiz', 'question')
+
+
+class MultiChoiceQuestionItemSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = MultiChoiceQuestionItem
+        fields = ('choice_question', 'choice_value')
+
+
+class MultiChoiceAnswerSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = MultiChoiceAnswer
+        fields = ('choice_question', 'answer')

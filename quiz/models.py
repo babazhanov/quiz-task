@@ -9,7 +9,7 @@ class Quiz(models.Model):
     def __str__(self):
         return self.title
 
-    title = models.CharField(verbose_name="Текст опроса", max_length=80)
+    title = models.CharField(verbose_name="Название", max_length=80)
     date_start = models.DateField(verbose_name="Дата начала")
     date_end = models.DateField(verbose_name="Дата окончания")
     description = models.TextField(verbose_name="Описание")
@@ -25,6 +25,7 @@ class Question(models.Model):
         return str(self.quiz)
 
     quiz = models.ForeignKey(Quiz, verbose_name="Опрос", on_delete=models.CASCADE)
+    question = models.TextField(verbose_name="Вопрос")
 
 
 class SimpleQuestion(Question):
@@ -33,7 +34,7 @@ class SimpleQuestion(Question):
         verbose_name_plural = 'Ответы текстом'
 
     def __str__(self):
-        return "Simple: ".format(self.answer)
+        return "Simple: {} {}".format(self.question, self.answer)
 
     answer = models.TextField(verbose_name="Ответ")
 
@@ -44,8 +45,9 @@ class ChoiceQuestionItem(models.Model):
         verbose_name_plural = 'Вариант ответа'
 
     def __str__(self):
-        return str(self.choice_value)
+        return "Item: {} {}".format(self.choice_question, self.choice_value)
 
+    choice_question = models.ForeignKey("ChoiceQuestion", verbose_name="Вопрос с выбором", on_delete=models.CASCADE, null=True)
     choice_value = models.TextField(verbose_name="Вариант ответа")
 
 
@@ -55,6 +57,39 @@ class ChoiceQuestion(Question):
         verbose_name_plural = 'Вопросы с одним вариантом ответа'
 
     def __str__(self):
-        return str(self.choice)
+        return "Choice: {} {}".format(self.question, self.choice)
 
-    choice = models.ForeignKey(ChoiceQuestionItem, verbose_name="Правильный ответ", on_delete=models.CASCADE)
+    choice = models.ForeignKey(ChoiceQuestionItem, verbose_name="Ответ", on_delete=models.CASCADE, null=True)
+
+
+class MultiChoiceQuestion(Question):
+    class Meta:
+        verbose_name = 'Вопрос с несколькими вариантами'
+        verbose_name_plural = 'Вопросы с несколькими вариантами'
+
+    def __str__(self):
+        return "MultiChoice: {}".format(self.question)
+
+
+class MultiChoiceQuestionItem(models.Model):
+    class Meta:
+        verbose_name = 'Вариант ответа'
+        verbose_name_plural = 'Вариант ответа'
+
+    def __str__(self):
+        return "Item: {} {}".format(self.choice_question, self.choice_value)
+
+    choice_question = models.ForeignKey(MultiChoiceQuestion, verbose_name="Вопрос с множественным выбором",
+                                        on_delete=models.CASCADE, null=True)
+    choice_value = models.TextField(verbose_name="Вариант ответа")
+
+
+class MultiChoiceAnswer(models.Model):
+    class Meta:
+        verbose_name = 'Ответ пользователя'
+        verbose_name_plural = 'Ответы пользователя'
+
+    choice_question = models.ForeignKey(MultiChoiceQuestion, verbose_name="Вопрос с множественным выбором",
+                                        on_delete=models.CASCADE, null=True)
+    answer = models.ForeignKey(MultiChoiceQuestionItem, verbose_name="Ответ",
+                                        on_delete=models.SET_NULL, null=True)
