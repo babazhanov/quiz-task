@@ -1,11 +1,17 @@
+from datetime import date
+
 from django.shortcuts import render
-from rest_framework import viewsets
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import viewsets, generics
+from rest_framework.generics import ListAPIView
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from quiz.models import Quiz, SimpleQuestion, ChoiceQuestionItem, ChoiceQuestion, MultiChoiceQuestion, \
-    MultiChoiceQuestionItem, MultiChoiceAnswer
+    MultiChoiceQuestionItem, MultiChoiceAnswer, SimpleAnswer, Answer, ChoiceAnswer
 from quiz.serializers import QuizSerializer, SimpleQuestionSerializer, ChoiceQuestionItemSerializer, \
     ChoiceQuestionSerializer, MultiChoiceQuestionSerializer, MultiChoiceQuestionItemSerializer, \
-    MultiChoiceAnswerSerializer
+    MultiChoiceAnswerSerializer, SimpleAnswerSerializer, GeneralAnswerSerializer, ChoiceAnswerSerializer
 
 
 class QuizViewSet(viewsets.ModelViewSet):
@@ -44,7 +50,51 @@ class MultiChoiceQuestionItemViewSet(viewsets.ModelViewSet):
     serializer_class = MultiChoiceQuestionItemSerializer
 
 
+class SimpleAnswerViewSet(viewsets.ModelViewSet):
+
+    queryset = SimpleAnswer.objects.all()
+    serializer_class = SimpleAnswerSerializer
+
+
+class ChoiceAnswerViewSet(viewsets.ModelViewSet):
+
+    queryset = ChoiceAnswer.objects.all()
+    serializer_class = ChoiceAnswerSerializer
+
+
 class MultiChoiceAnswerViewSet(viewsets.ModelViewSet):
 
     queryset = MultiChoiceAnswer.objects.all()
     serializer_class = MultiChoiceAnswerSerializer
+
+
+class ActiveQuizAPIView(generics.ListAPIView):
+    serializer_class = QuizSerializer
+
+    def get_queryset(self):
+        today = date.today()
+        return Quiz.objects.filter(date_start__lte=today, date_end__gte=today)
+
+
+class UserQuizzesAPIView(ListAPIView):
+    def list(self, request, *args, **kwargs):
+        serializer_context = {
+            'request': request,
+        }
+
+        simple_answers = SimpleAnswer.objects.all()
+        choice_answers = ChoiceAnswer.objects.all()
+        multi_choice_answers = MultiChoiceAnswer.objects.all()
+        try:
+            user_id = int(request.GET.get('user_id'))
+            simple_answers = SimpleAnswer.objects.filter(user_id=user_id)
+            choice_answers = ChoiceAnswer.objects.filter(user_id=user_id)
+            multi_choice_answers = MultiChoiceAnswer.objects.filter(user_id=user_id)
+        except Exception:
+            pass
+
+        simple_serializer = GeneralAnswerSerializer(simple_answers, many=True, context=serializer_context)
+        choice_serializer = GeneralAnswerSerializer(choice_answers, many=True, context=serializer_context)
+        multi_choice_serializer = GeneralAnswerSerializer(multi_choice_answers, many=True, context=serializer_context)
+
+        return Response({"answers": simple_serializer.data + choice_serializer.data + multi_choice_serializer.data})

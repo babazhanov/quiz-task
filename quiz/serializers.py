@@ -1,7 +1,9 @@
+from abc import ABC
+
 from rest_framework import serializers
 
 from quiz.models import Quiz, SimpleQuestion, ChoiceQuestionItem, ChoiceQuestion, MultiChoiceQuestion, \
-    MultiChoiceQuestionItem, MultiChoiceAnswer
+    MultiChoiceQuestionItem, MultiChoiceAnswer, SimpleAnswer, ChoiceAnswer
 
 
 class QuizSerializer(serializers.HyperlinkedModelSerializer):
@@ -19,7 +21,7 @@ class QuizSerializer(serializers.HyperlinkedModelSerializer):
 class SimpleQuestionSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = SimpleQuestion
-        fields = ('quiz', 'question', 'answer',)
+        fields = ('quiz', 'question')
 
 
 class ChoiceQuestionItemSerializer(serializers.HyperlinkedModelSerializer):
@@ -31,7 +33,7 @@ class ChoiceQuestionItemSerializer(serializers.HyperlinkedModelSerializer):
 class ChoiceQuestionSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = ChoiceQuestion
-        fields = ('quiz', 'question', 'choice',)
+        fields = ('quiz', 'question',)
 
 
 class MultiChoiceQuestionSerializer(serializers.HyperlinkedModelSerializer):
@@ -46,7 +48,31 @@ class MultiChoiceQuestionItemSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('choice_question', 'choice_value')
 
 
+class SimpleAnswerSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = SimpleAnswer
+        fields = ('question', 'answer', 'user_id')
+
+
+class ChoiceAnswerSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = ChoiceAnswer
+        fields = ('question', 'answer', 'user_id')
+
+
 class MultiChoiceAnswerSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = MultiChoiceAnswer
-        fields = ('choice_question', 'answer')
+        fields = ('question', 'answer', 'user_id')
+
+
+class GeneralAnswerSerializer(serializers.Serializer):
+    def create(self, validated_data):
+        pass
+
+    def update(self, instance, validated_data):
+        pass
+
+    user_id = serializers.IntegerField()
+    question = serializers.CharField()
+    answer = serializers.CharField()
