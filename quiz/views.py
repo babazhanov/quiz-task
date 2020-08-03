@@ -1,50 +1,61 @@
 from datetime import date
 
-from django.shortcuts import render
-from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets, generics
+from rest_framework.authentication import SessionAuthentication
 from rest_framework.generics import ListAPIView
+from rest_framework.permissions import DjangoModelPermissions
 from rest_framework.response import Response
-from rest_framework.views import APIView
 
 from quiz.models import Quiz, SimpleQuestion, ChoiceQuestionItem, ChoiceQuestion, MultiChoiceQuestion, \
-    MultiChoiceQuestionItem, MultiChoiceAnswer, SimpleAnswer, Answer, ChoiceAnswer
+    MultiChoiceQuestionItem, MultiChoiceAnswer, SimpleAnswer, ChoiceAnswer
 from quiz.serializers import QuizSerializer, SimpleQuestionSerializer, ChoiceQuestionItemSerializer, \
     ChoiceQuestionSerializer, MultiChoiceQuestionSerializer, MultiChoiceQuestionItemSerializer, \
     MultiChoiceAnswerSerializer, SimpleAnswerSerializer, GeneralAnswerSerializer, ChoiceAnswerSerializer
 
 
 class QuizViewSet(viewsets.ModelViewSet):
+    authentication_classes = (SessionAuthentication,)
+    permission_classes = (DjangoModelPermissions,)
 
     queryset = Quiz.objects.all()
     serializer_class = QuizSerializer
 
 
 class SimpleQuestionViewSet(viewsets.ModelViewSet):
+    authentication_classes = (SessionAuthentication,)
+    permission_classes = (DjangoModelPermissions,)
 
     queryset = SimpleQuestion.objects.all()
     serializer_class = SimpleQuestionSerializer
 
 
 class ChoiceQuestionItemViewSet(viewsets.ModelViewSet):
+    authentication_classes = (SessionAuthentication,)
+    permission_classes = (DjangoModelPermissions,)
 
     queryset = ChoiceQuestionItem.objects.all()
     serializer_class = ChoiceQuestionItemSerializer
 
 
 class ChoiceQuestionViewSet(viewsets.ModelViewSet):
+    authentication_classes = (SessionAuthentication,)
+    permission_classes = (DjangoModelPermissions,)
 
     queryset = ChoiceQuestion.objects.all()
     serializer_class = ChoiceQuestionSerializer
 
 
 class MultiChoiceQuestionViewSet(viewsets.ModelViewSet):
+    authentication_classes = (SessionAuthentication,)
+    permission_classes = (DjangoModelPermissions,)
 
     queryset = MultiChoiceQuestion.objects.all()
     serializer_class = MultiChoiceQuestionSerializer
 
 
 class MultiChoiceQuestionItemViewSet(viewsets.ModelViewSet):
+    authentication_classes = (SessionAuthentication,)
+    permission_classes = (DjangoModelPermissions,)
 
     queryset = MultiChoiceQuestionItem.objects.all()
     serializer_class = MultiChoiceQuestionItemSerializer

@@ -1,5 +1,7 @@
 from abc import ABC
 
+from django.contrib.auth import authenticate
+from django.contrib.auth.models import User
 from rest_framework import serializers
 
 from quiz.models import Quiz, SimpleQuestion, ChoiceQuestionItem, ChoiceQuestion, MultiChoiceQuestion, \
