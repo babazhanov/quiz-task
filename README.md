@@ -17,12 +17,8 @@ python3 manage.py runserver 0.0.0.0:8000
 ```
 
 ### API
+#####Интерфейс администратора (требуется авторизация)
 /quizzes/ - Просмотр и ввод информации об опросе
-* title - Название
-* date_start - Дата старта
-* date_end - Дата окончания
-* description - Описание
-
 
 /simple/ - Вопрос с текстовым ответом 
 
@@ -32,6 +28,16 @@ python3 manage.py runserver 0.0.0.0:8000
 
 /multi-choice/ - Вопрос с множественными вариантами
 
-/multi-choice-item/ - Варианты для multi-choice
+/multi-choice-item/ - Варианты для для вопросов с множественным выбором
 
-/multi-choice-answer/ - Ответы для multi-choice
+#####Интерфейс пользователя
+/simple-answer/ - Простой ответ текстом
+
+/choice-answer/ - Ответ для вопросов с одним вариантом
+
+/multi-choice-answer/ - Ответы для вопросов с множественным выбором
+
+/user-active-quizzes/ - Список активных опросов
+
+/user-quizzes-passed\[?user_id=USER_ID\]/ - просмотр пройдённых опросов; 
+при указании параметра USER_ID, происходит фильтрация по ID пользователя
