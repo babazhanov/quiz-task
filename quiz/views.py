@@ -6,11 +6,11 @@ from rest_framework.generics import ListAPIView
 from rest_framework.permissions import DjangoModelPermissions
 from rest_framework.response import Response
 
-from quiz.models import Quiz, SimpleQuestion, ChoiceQuestionItem, ChoiceQuestion, MultiChoiceQuestion, \
-    MultiChoiceQuestionItem, MultiChoiceAnswer, SimpleAnswer, ChoiceAnswer
+from quiz.models import Quiz, SimpleQuestion, ChoiceQuestionItem, ChoiceQuestion, MultiChoiceAnswer, SimpleAnswer, \
+    ChoiceAnswer
 from quiz.serializers import QuizSerializer, SimpleQuestionSerializer, ChoiceQuestionItemSerializer, \
-    ChoiceQuestionSerializer, MultiChoiceQuestionSerializer, MultiChoiceQuestionItemSerializer, \
-    MultiChoiceAnswerSerializer, SimpleAnswerSerializer, GeneralAnswerSerializer, ChoiceAnswerSerializer
+    ChoiceQuestionSerializer, MultiChoiceAnswerSerializer, SimpleAnswerSerializer, GeneralAnswerSerializer, \
+    ChoiceAnswerSerializer
 
 
 class QuizViewSet(viewsets.ModelViewSet):
@@ -45,36 +45,17 @@ class ChoiceQuestionViewSet(viewsets.ModelViewSet):
     serializer_class = ChoiceQuestionSerializer
 
 
-class MultiChoiceQuestionViewSet(viewsets.ModelViewSet):
-    authentication_classes = (SessionAuthentication,)
-    permission_classes = (DjangoModelPermissions,)
-
-    queryset = MultiChoiceQuestion.objects.all()
-    serializer_class = MultiChoiceQuestionSerializer
-
-
-class MultiChoiceQuestionItemViewSet(viewsets.ModelViewSet):
-    authentication_classes = (SessionAuthentication,)
-    permission_classes = (DjangoModelPermissions,)
-
-    queryset = MultiChoiceQuestionItem.objects.all()
-    serializer_class = MultiChoiceQuestionItemSerializer
-
-
 class SimpleAnswerViewSet(viewsets.ModelViewSet):
-
     queryset = SimpleAnswer.objects.all()
     serializer_class = SimpleAnswerSerializer
 
 
 class ChoiceAnswerViewSet(viewsets.ModelViewSet):
-
     queryset = ChoiceAnswer.objects.all()
     serializer_class = ChoiceAnswerSerializer
 
 
 class MultiChoiceAnswerViewSet(viewsets.ModelViewSet):
-
     queryset = MultiChoiceAnswer.objects.all()
     serializer_class = MultiChoiceAnswerSerializer
 

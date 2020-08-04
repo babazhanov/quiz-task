@@ -1,11 +1,7 @@
-from abc import ABC
-
-from django.contrib.auth import authenticate
-from django.contrib.auth.models import User
 from rest_framework import serializers
 
-from quiz.models import Quiz, SimpleQuestion, ChoiceQuestionItem, ChoiceQuestion, MultiChoiceQuestion, \
-    MultiChoiceQuestionItem, MultiChoiceAnswer, SimpleAnswer, ChoiceAnswer
+from quiz.models import Quiz, SimpleQuestion, ChoiceQuestionItem, ChoiceQuestion, MultiChoiceAnswer, SimpleAnswer, \
+    ChoiceAnswer
 
 
 class QuizSerializer(serializers.HyperlinkedModelSerializer):
@@ -29,25 +25,13 @@ class SimpleQuestionSerializer(serializers.HyperlinkedModelSerializer):
 class ChoiceQuestionItemSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = ChoiceQuestionItem
-        fields = ('choice_question', 'choice_value',)
+        fields = ('choice_value',)
 
 
 class ChoiceQuestionSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = ChoiceQuestion
-        fields = ('quiz', 'question',)
-
-
-class MultiChoiceQuestionSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = MultiChoiceQuestion
-        fields = ('quiz', 'question')
-
-
-class MultiChoiceQuestionItemSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = MultiChoiceQuestionItem
-        fields = ('choice_question', 'choice_value')
+        fields = ('quiz', 'question', 'choices')
 
 
 class SimpleAnswerSerializer(serializers.HyperlinkedModelSerializer):

@@ -43,7 +43,6 @@ class APITestCase(TestCase):
         self.assertEqual(resp.status_code, 200)
 
     def add_simple(self):
-        print(reverse('quiz-detail', kwargs={"pk": 1}))
         resp = self.client.post('/simple/', {
             'quiz': reverse('quiz-detail', kwargs={"pk": 1}),
             'question': 'Кто проживает на дне океана?'

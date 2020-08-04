@@ -43,42 +43,20 @@ class ChoiceQuestionItem(models.Model):
         verbose_name_plural = 'Вариант ответа'
 
     def __str__(self):
-        return "Item: {} {}".format(self.choice_question, self.choice_value)
+        return "Choice Item: {}".format(self.choice_value)
 
-    choice_question = models.ForeignKey("ChoiceQuestion", verbose_name="Вопрос с выбором", on_delete=models.CASCADE,
-                                        null=True)
     choice_value = models.TextField(verbose_name="Вариант ответа")
 
 
 class ChoiceQuestion(Question):
     class Meta:
-        verbose_name = 'Вопрос с одним вариантом ответа'
-        verbose_name_plural = 'Вопросы с одним вариантом ответа'
+        verbose_name = 'Вопрос с вариантами'
+        verbose_name_plural = 'Вопросы вариантами'
 
     def __str__(self):
         return "Choice: {}".format(self.question)
 
-
-class MultiChoiceQuestion(Question):
-    class Meta:
-        verbose_name = 'Вопрос с несколькими вариантами'
-        verbose_name_plural = 'Вопросы с несколькими вариантами'
-
-    def __str__(self):
-        return "MultiChoice: {}".format(self.question)
-
-
-class MultiChoiceQuestionItem(models.Model):
-    class Meta:
-        verbose_name = 'Вариант ответа'
-        verbose_name_plural = 'Вариант ответа'
-
-    def __str__(self):
-        return "Item: {} {}".format(self.choice_question, self.choice_value)
-
-    choice_question = models.ForeignKey(MultiChoiceQuestion, verbose_name="Вопрос с множественным выбором",
-                                        on_delete=models.CASCADE, null=True)
-    choice_value = models.TextField(verbose_name="Вариант ответа")
+    choices = models.ManyToManyField(ChoiceQuestionItem, verbose_name="Варианты ответа")
 
 
 # Классы ответов для пользователей
@@ -115,7 +93,7 @@ class ChoiceAnswer(Answer):
     def __str__(self):
         return "Choice: {} {}".format(self.question, self.answer)
 
-    question = models.ForeignKey(ChoiceQuestion, verbose_name="Вопрос с одним вариантом",
+    question = models.ForeignKey(ChoiceQuestion, verbose_name="Вопрос с вариантами",
                                  on_delete=models.CASCADE, null=True)
     answer = models.ForeignKey(ChoiceQuestionItem, verbose_name="Ответ", on_delete=models.CASCADE, null=True)
 
@@ -125,7 +103,6 @@ class MultiChoiceAnswer(Answer):
         verbose_name = 'Ответ пользователя'
         verbose_name_plural = 'Ответы пользователя'
 
-    question = models.ForeignKey(MultiChoiceQuestion, verbose_name="Вопрос с множественным выбором",
-                                        on_delete=models.CASCADE, null=True)
-    answer = models.ForeignKey(MultiChoiceQuestionItem, verbose_name="Один из ответов",
-                               on_delete=models.SET_NULL, null=True)
+    question = models.ForeignKey(ChoiceQuestion, verbose_name="Вопрос с вариантами",
+                                 on_delete=models.CASCADE, null=True)
+    answer = models.ManyToManyField(ChoiceQuestionItem, verbose_name="Ответы")
