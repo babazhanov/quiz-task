@@ -9,8 +9,8 @@ from rest_framework.response import Response
 from quiz.models import Quiz, SimpleQuestion, ChoiceQuestionItem, ChoiceQuestion, MultiChoiceAnswer, SimpleAnswer, \
     ChoiceAnswer
 from quiz.serializers import QuizSerializer, SimpleQuestionSerializer, ChoiceQuestionItemSerializer, \
-    ChoiceQuestionSerializer, MultiChoiceAnswerSerializer, SimpleAnswerSerializer, GeneralAnswerSerializer, \
-    ChoiceAnswerSerializer
+    ChoiceQuestionSerializer, MultiChoiceAnswerSerializer, SimpleAnswerSerializer, TextAnswerSerializer, \
+    ChoiceAnswerSerializer, TextMultiAnswerSerializer
 
 
 class QuizViewSet(viewsets.ModelViewSet):
@@ -85,8 +85,8 @@ class UserQuizzesAPIView(ListAPIView):
         except Exception:
             pass
 
-        simple_serializer = GeneralAnswerSerializer(simple_answers, many=True, context=serializer_context)
-        choice_serializer = GeneralAnswerSerializer(choice_answers, many=True, context=serializer_context)
-        multi_choice_serializer = GeneralAnswerSerializer(multi_choice_answers, many=True, context=serializer_context)
+        simple_serializer = TextAnswerSerializer(simple_answers, many=True, context=serializer_context)
+        choice_serializer = TextAnswerSerializer(choice_answers, many=True, context=serializer_context)
+        multi_choice_serializer = TextMultiAnswerSerializer(multi_choice_answers, many=True, context=serializer_context)
 
         return Response({"answers": simple_serializer.data + choice_serializer.data + multi_choice_serializer.data})

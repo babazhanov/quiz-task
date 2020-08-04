@@ -52,7 +52,7 @@ class MultiChoiceAnswerSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('question', 'answer', 'user_id')
 
 
-class GeneralAnswerSerializer(serializers.Serializer):
+class TextAnswerSerializer(serializers.Serializer):
     def create(self, validated_data):
         pass
 
@@ -62,3 +62,15 @@ class GeneralAnswerSerializer(serializers.Serializer):
     user_id = serializers.IntegerField()
     question = serializers.CharField()
     answer = serializers.CharField()
+
+
+class TextMultiAnswerSerializer(serializers.Serializer):
+    def create(self, validated_data):
+        pass
+
+    def update(self, instance, validated_data):
+        pass
+
+    user_id = serializers.IntegerField()
+    question = serializers.CharField()
+    answer = serializers.StringRelatedField(many=True)
